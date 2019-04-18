@@ -5,8 +5,11 @@ from datetime import datetime
 from . import db
 from ..app import bcrypt
 
+from .doc import DocSchema
+from .comment import CommentSchema
 
-class User(db.Model):
+
+class UserModel(db.Model):
 
     __tablename__ = 'users'
 
@@ -16,6 +19,8 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=True)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
+    docs = db.relationship('DocModel', backref='users', lazy=True)
+    comments = db.relationship('CommentModel', backref='users', lazy=True)
 
     def __init__(self, data):
         self.name = data.get('name')
@@ -67,4 +72,6 @@ class UserSchema(Schema):
     password = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
+    docs = fields.Nested(DocSchema, many=True)
+    comments = fields.Nested(CommentSchema, many=True)
 
