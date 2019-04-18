@@ -31,6 +31,7 @@ class DocModel(db.Model):
         self.owner_id = data.get('owner_id')
         self.title = data.get('title')
         self.doc_type = data.get('doc_type')
+        self.language = data.get('language')
         self.content = data.get('content')
         self.created_at = datetime.utcnow()
         self.modified_at = datetime.utcnow()
@@ -61,11 +62,16 @@ class DocModel(db.Model):
     def get_docs_by_type(doc_type)
         return DocModel.query.filter_by(doc_type=doc_type)
 
+    @staticmethod
+    def get_docs_by_language(language):
+        return DocModel.query.filter_by(language=language)
+
 
 class DocSchema(Schema):
     id = fields.Int(dump_only=True)
     owner_id = fields.Int(required=True)
     doc_type = EnumField(DocType)
+    language = fields.Str(required=True)
     title = fields.Str(required=True)
     content = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True)
