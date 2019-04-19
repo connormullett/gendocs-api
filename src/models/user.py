@@ -60,6 +60,10 @@ class UserModel(db.Model):
         return User.query.get(id)
 
     @staticmethod
+    def get_user_by_name(name):
+        return User.query.filter_by(name=name).first()
+
+    @staticmethod
     def get_user_by_email(value):
         return User.query.filter_by(email=value).first()
 
