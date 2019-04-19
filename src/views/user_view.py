@@ -1,8 +1,8 @@
 # user_view.py
 
-from flask import request, json, Respone, Blueprint
+from flask import request, json, Response, Blueprint
 from ..models.user import UserModel, UserSchema
-from ..shared.Authentication import Auth
+from ..shared.authentication import Auth
 
 user_api = Blueprint('users', __name__)
 user_schema = UserSchema()
@@ -45,7 +45,7 @@ def login():
 
     user = UserModel.get_user_by_email(data.get('email'))
 
-    if not user or not user.check_hash(data.get('password')):
+    if not user or not user._check_hash(data.get('password')):
         return custom_response({'error': 'invalid credentials'})
 
     ser_data = user_schema.dump(user).data

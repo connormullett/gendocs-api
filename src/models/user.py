@@ -53,19 +53,19 @@ class UserModel(db.Model):
 
     @staticmethod
     def get_all_users():
-        return User.query.all()
+        return UserModel.query.all()
 
     @staticmethod
     def get_user_by_id(id):
-        return User.query.get(id)
+        return UserModel.query.get(id)
 
     @staticmethod
     def get_user_by_name(name):
-        return User.query.filter_by(name=name).first()
+        return UserModel.query.filter_by(name=name).first()
 
     @staticmethod
     def get_user_by_email(value):
-        return User.query.filter_by(email=value).first()
+        return UserModel.query.filter_by(email=value).first()
 
 
 # models/user.py
