@@ -8,7 +8,7 @@ from marshmallow import fields, Schema
 from marshmallow_enum import EnumField
 
 
-class DocType(enum.Enum)
+class DocType(enum.Enum):
     TUTORIAL = 'tutorial'
     DEMO = 'demo'
     QUESTION = 'question'
@@ -20,7 +20,7 @@ class DocModel(db.Model):
     __tablename__ = 'docs'
 
     id = db.Column(db.Integer, primary_key=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(128), nullable=False)
     doc_type = db.Column(db.Enum(DocType), nullable=False)
     content = db.Column(db.Text, nullable=False)
@@ -59,7 +59,7 @@ class DocModel(db.Model):
         return DocModel.query.get(id)
 
     @staticmethod
-    def get_docs_by_type(doc_type)
+    def get_docs_by_type(doc_type):
         return DocModel.query.filter_by(doc_type=doc_type)
 
     @staticmethod

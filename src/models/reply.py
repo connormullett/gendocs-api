@@ -1,19 +1,17 @@
-# comment.py
 
 from . import db
 from datetime import datetime
 from marshmallow import fields, Schema
 
-# from .reply import ReplyModel
 
+class ReplyModel(db.Model):
 
-class CommentModel(db.Model):
-
-    __tablename__ = 'comments'
+    __tablename__ = 'replies'
 
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    reply_to = db.Column(db.Integer, db.ForeignKey('comments.id'), nullable=False)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
@@ -21,6 +19,7 @@ class CommentModel(db.Model):
         self.id = data.get('id')
         self.owner_id = data.get('owner_id')
         self.content = data.get('content')
+        self.reply_to = data.get('reply_to')
         self.created_at = datetime.utcnow()
         self.modified_at = datetime.utcnow()
 
@@ -38,17 +37,12 @@ class CommentModel(db.Model):
         self.modified_at = datetime.utcnow()
         db.session.commit()
 
-    # TODO: potentially dont need query methods for comments
 
-    @staticmethod
-    def get_replies_from_comment_id(comment_id):
-        pass
-
-
-class CommentSchema(Schema):
+class ReplySchema(Schema):
     id = fields.Int(dump_only=True)
     owner_id = fields.Int(required=True)
     content = fields.Str(required=True)
+    reply_to = fields.Int(required=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
 
