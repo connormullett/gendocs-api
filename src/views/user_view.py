@@ -16,9 +16,6 @@ def register():
     if error:
         return custom_response(error, 404)
 
-    if not data.get('password') == data.get('confirm_password'):
-        return custom_response({'error': 'password mismatch'}, 400)
-
     user_in_db = UserModel.get_user_by_email(data.get('email'))
     if user_in_db:
         message = {'error': 'user already exists'}
