@@ -13,11 +13,11 @@ def register():
     req_data = request.get_json()
     data, error = user_schema.load(req_data)
 
-    if data.get('password') != data.get('confirm_password'):
-        return custom_response({'error': 'password mismatch'}, 400)
-
     if error:
         return custom_response(error, 404)
+
+    if not data.get('password') == data.get('confirm_password'):
+        return custom_response({'error': 'password mismatch'}, 400)
 
     user_in_db = UserModel.get_user_by_email(data.get('email'))
     if user_in_db:
