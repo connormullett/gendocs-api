@@ -6,6 +6,7 @@ from .config import app_config
 from .models import db, bcrypt
 
 from .views.user_view import user_api
+from .views.doc_view import doc_api
 
 
 def create_app(env_name):
@@ -17,6 +18,7 @@ def create_app(env_name):
     CORS(app)
 
     app.register_blueprint(user_api, url_prefix='/v1/users')
+    app.register_blueprint(doc_api, url_prefix='/v1/docs')
 
     bcrypt.init_app(app)
     db.init_app(app)
