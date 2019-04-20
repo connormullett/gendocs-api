@@ -17,28 +17,25 @@ def create_doc():
     req_data['owner_id'] = g.user['id']
     data, error = doc_schema.load(req_data)
 
-    # TODO: Figure out setting enum from string
-    #       apply to DocType object
-
     if error:
         return custom_response(error, 404)
 
     doc = DocModel(data)
     doc.save()
 
-    data = doc_schema.dump(post).data
+    data = doc_schema.dump(doc).data
     return custom_response(data, 201)
 
 
-@doc_api('/<int:id>', methods=['DELETE'])
+@doc_api.route('/<int:doc_id>', methods=['DELETE'])
 @Auth.auth_required
 def delete(doc_id):
-    doc = DocModel.get_one_doc(doc_id)
+    doc = DocModel.get_doc_by_id(doc_id)
 
-    if not post:
-        return custom_response({'error': 'post not found'}, 404)
+    if not doc:
+        return custom_response({'error': 'doc not found'}, 404)
 
-    data = doc_schema.dump(post).data
+    data = doc_schema.dump(doc).data
     if data.get('owner_id') != g.user.get('id'):
         return custom_response({'error': 'permission denied'}, 400)
 
@@ -60,9 +57,9 @@ def get_one(doc_id):
     doc = DocModel.get_doc_by_id(doc_id)
 
     if not doc:
-        return custom_response({'error': 'post not found'}, 404)
+        return custom_response({'error': 'doc not found'}, 404)
 
-    data = doc_schema.dump(post).data
+    data = doc_schema.dump(doc).data
 
     return custom_response(data, 200)
 
@@ -80,10 +77,10 @@ def get_docs_by_type(doc_type):
 @Auth.auth_required
 def update(doc_id):
     req_data = request.get_json()
-    doc = DocModel.get_one_doc(doc_id)
+    doc = DocModel.get_doc_by_id(doc_id)
 
     if not doc:
-        return custom_response({'error': 'post not found'}, 404)
+        return custom_response({'error': 'doc not found'}, 404)
 
     data = doc_schema.dump(doc).data
 
@@ -97,12 +94,12 @@ def update(doc_id):
 
     doc.update(data)
     data = doc_schema.dump(doc).data
-    return custom_response(dat, 200)
+    return custom_response(data, 200)
 
 
 @doc_api.route('/types', methods=['GET'])
 def get_doc_types():
-    doc_types = DocModel.get_docs_by_type()
+    doc_types = DocModel.get_doc_types()
 
     return custom_response({'types': doc_types}, 200)
 

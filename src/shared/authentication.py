@@ -31,7 +31,7 @@ class Auth:
                 )
 
             user_id = data['data']['user_id']
-            check_user = UserModel.get_one_user(user_id)
+            check_user = UserModel.get_user_by_id(user_id)
 
             if not check_user:
                 return Response(
