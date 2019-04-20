@@ -9,4 +9,3 @@ app = create_app(env_name)
 
 if __name__ == '__main__':
     app.run()
-

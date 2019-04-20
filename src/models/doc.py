@@ -51,6 +51,10 @@ class DocModel(db.Model):
         db.session.commit()
 
     @staticmethod
+    def get_doc_types():
+        return [doc_t.value for doc_t in DocType]
+
+    @staticmethod
     def get_all_docs():
         return DocModel.query.all()
 
