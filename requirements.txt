@@ -18,7 +18,11 @@ Mako==1.0.8
 MarkupSafe==1.1.1
 marshmallow==2.19.2
 marshmallow-enum==1.4.1
+<<<<<<< HEAD
 psycopg2==2.8.2
+=======
+psycopg2-binary==2.8.2
+>>>>>>> a5a5e679bab24e48413bfb4b7d01a0460e399751
 pycparser==2.19
 Pygments==2.3.1
 PyJWT==1.7.1
