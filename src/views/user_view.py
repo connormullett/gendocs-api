@@ -76,6 +76,8 @@ def me():
     and is pulled to present users data
     '''
 
+    user = UserModel.get_one_user(g.user.get('id'))
+
     if request.method == 'PUT':
         req_data = request.get_json()
         data, error = user_schema.load(req_data, partial=True)
@@ -83,17 +85,14 @@ def me():
         if error:
             return custom_response(error, 400)
 
-        user = UserModel.get_one_user(g.user.get('id'))
         user.update(data)
         ser_user = user_schema.dump(user).data
         return custom_response(ser_user, 200)
 
     elif request.method == 'DELETE':
-        user = UserModel.get_one_user(g.user.get('id'))
         user.delete()
         return custom_response({'message': 'deleted'}, 204)
 
-    user = UserModel.get_one_user(g.user.get('id'))
     ser_user = user_schema.dump(user).data
     return custom_response(ser_user, 200)
 
