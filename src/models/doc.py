@@ -7,6 +7,8 @@ from datetime import datetime
 from marshmallow import fields, Schema
 from marshmallow_enum import EnumField
 
+from .comment import CommentModel, CommentSchema
+
 
 class DocType(enum.Enum):
     TUTORIAL = 'tutorial'
@@ -23,6 +25,7 @@ class DocModel(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(128), nullable=False)
     doc_type = db.Column(db.Enum(DocType), nullable=False)
+    comments = db.relationship('CommentModel', backref='docs', cascade='all, delete')
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
@@ -80,4 +83,5 @@ class DocSchema(Schema):
     content = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
+    comments = fields.Nested(CommentSchema, many=True)
 
