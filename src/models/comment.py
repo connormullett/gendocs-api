@@ -13,6 +13,7 @@ class CommentModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    doc_id = db.Column(db.Integer, db.ForeignKey('docs.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)

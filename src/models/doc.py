@@ -25,6 +25,7 @@ class DocModel(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(128), nullable=False)
     doc_type = db.Column(db.Enum(DocType), nullable=False)
+    language = db.Column(db.Text, nullable=False)
     comments = db.relationship('CommentModel', backref='docs', cascade='all, delete')
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime)
