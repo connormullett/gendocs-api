@@ -2,6 +2,7 @@
 
 from flask import Flask
 from flask_cors import CORS
+from flask_heroku import Heroku
 from .config import app_config
 from .models import db, bcrypt
 
@@ -16,6 +17,7 @@ def create_app(env_name):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     CORS(app)
+    heroku = Heroku(app)
 
     app.register_blueprint(user_api, url_prefix='/v1/users')
     app.register_blueprint(doc_api, url_prefix='/v1/docs')

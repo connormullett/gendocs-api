@@ -19,8 +19,8 @@ class UserModel(db.Model):
     password = db.Column(db.String(128), nullable=True)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
-    docs = db.relationship('DocModel', backref='users', lazy=True)
-    comments = db.relationship('CommentModel', backref='users', lazy=True)
+    docs = db.relationship('DocModel', backref='users', cascade='all, delete-orphan', lazy=True)
+    comments = db.relationship('CommentModel', backref='users', cascade='all, delete-orphan', lazy=True)
 
     def __init__(self, data):
         self.name = data.get('name')
