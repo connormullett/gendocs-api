@@ -113,6 +113,9 @@ def get_user(user_id):
 
 
 def custom_response(res, status_code):
+    '''
+    helps with sending Responses from routes
+    '''
     return Response(
         mimetype='application/json',
         response=json.dumps(res),

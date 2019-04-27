@@ -21,6 +21,7 @@ class CommentModel(db.Model):
     def __init__(self, data):
         self.id = data.get('id')
         self.owner_id = data.get('owner_id')
+        self.doc_id = data.get('doc_id')
         self.content = data.get('content')
         self.created_at = datetime.utcnow()
         self.modified_at = datetime.utcnow()
@@ -39,7 +40,9 @@ class CommentModel(db.Model):
         self.modified_at = datetime.utcnow()
         db.session.commit()
 
-    # TODO: potentially dont need query methods for comments
+    @staticmethod
+    def get_all_comments_by_doc_id(doc_id):
+        return CommentModel.query.filter_by(doc_id=doc_id)
 
     @staticmethod
     def get_replies_from_comment_id(comment_id):
@@ -49,6 +52,7 @@ class CommentModel(db.Model):
 class CommentSchema(Schema):
     id = fields.Int(dump_only=True)
     owner_id = fields.Int(required=True)
+    doc_id = fields.Int(required=True)
     content = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
