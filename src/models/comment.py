@@ -41,6 +41,10 @@ class CommentModel(db.Model):
         db.session.commit()
 
     @staticmethod
+    def get_comment_by_id(comment_id):
+        return CommentModel.query.filter_by(id=comment_id)
+
+    @staticmethod
     def get_all_comments_by_doc_id(doc_id):
         return CommentModel.query.filter_by(doc_id=doc_id)
 

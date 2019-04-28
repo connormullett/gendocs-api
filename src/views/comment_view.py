@@ -42,3 +42,44 @@ def get_all_comments_by_doc_id(doc_id):
     data = comment_schema.dump(comments, many=True).data
     return custom_response(data, 200)
 
+
+@comment_api.route('/<int:comment_id>', methods=['GET', 'DELETE', 'PUT'])
+@Auth.auth_required
+def comment_actions(comment_id):
+    '''
+    Allows for update, delete,
+    and get methods on a single
+    comment, update and delete
+    only allowed if user_id from g
+    matches comments owner_id
+    '''
+
+    req_data = request.get_json()
+    comment = CommentModel.get_comment_by_id(comment_id)
+    data = comment_schema.dump(comment).data
+
+    if not comment:
+        return custom_response({'error': 'comment not found'}, 404)
+    
+    if request.method == 'PUT':
+        if data.get('owner_id') != g.user.get('id'):
+            return custom_response({'error': 'permission denied'}, 400)
+        
+        data, error = comment_schema.load(req_data, partial=True)
+
+        if error:
+            return custom_response(error, 400)
+        
+        comment.update(data)
+        data = comment_schema.dump(comment).data
+        return custom_response(data, 200)
+        
+    elif request.method == 'DELETE':
+        if data.get('owner_id') != g.user.get('id'):
+            return custom_response({'error': 'permission denied'}, 400)
+        
+        comment.delete()
+        return custom_response({'message': 'comment deleted'}, 204)
+    
+    # GET
+    return custom_response(data, 200)
