@@ -27,6 +27,7 @@ class Production:
 
 app_config = {
     'development': Development,
-    'production': Production
+    'production': Production,
+    'testing': Testing
 }
 
