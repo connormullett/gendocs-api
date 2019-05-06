@@ -7,6 +7,7 @@ class Testing:
 
     DEBUG = True
     TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.environ['TESTING_DATABASE_URL']
 
 
 class Development:

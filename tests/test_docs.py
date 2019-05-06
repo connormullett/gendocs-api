@@ -1,16 +1,24 @@
 
+import unittest
 import os
-import tempfile
+import json
+from gendocs.src.app import create_app, db
 
-import pytest, unittest
 
-from ..src import create_app
-
-class TestDocs(unittest.TestCase):
+class UserTests(unittest.TestCase):
 
     def setUp(self):
-        print(create_app)
+        self.app = create_app('testing')
+        self.client = self.app.test_client
+        self.user = {
+            'email': 'test@gmail.com',
+            'name': 'tester',
+            'password': 'test'
+        }
 
-# @pytest.fixture
-# def client():
-#     app = create_app('testing')
+        with self.app.app_context():
+            db.create_all()
+    
+    def test_user_registration_should_return_201(self):
+        res = self.client().post('/v1/users/', data=self.user)
+        self.assertEqual(res.status_code, 201)
