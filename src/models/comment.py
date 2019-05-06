@@ -42,7 +42,7 @@ class CommentModel(db.Model):
 
     @staticmethod
     def get_comment_by_id(comment_id):
-        return CommentModel.query.filter_by(id=comment_id)
+        return CommentModel.query.get(comment_id)
 
     @staticmethod
     def get_all_comments_by_doc_id(doc_id):

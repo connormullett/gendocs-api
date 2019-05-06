@@ -35,7 +35,7 @@ def create_comment():
     return custom_response(com_data, 201)
 
 
-@comment_api.route('/<int:doc_id>', methods=['GET'])
+@comment_api.route('/doc/<int:doc_id>', methods=['GET'])
 @Auth.auth_required
 def get_all_comments_by_doc_id(doc_id):
     comments = CommentModel.get_all_comments_by_doc_id(doc_id)

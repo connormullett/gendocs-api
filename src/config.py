@@ -3,6 +3,12 @@
 import os
 
 
+class Testing:
+
+    DEBUG = True
+    TESTING = True
+
+
 class Development:
 
     DEBUG = True
