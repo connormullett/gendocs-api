@@ -20,7 +20,7 @@ def register():
     data, error = user_schema.load(req_data)
 
     if error:
-        return custom_response(error, 404)
+        return custom_response(error, 400)
 
     user_in_db = UserModel.get_user_by_email(data.get('email'))
     if user_in_db:
