@@ -19,7 +19,7 @@ class UserTests(unittest.TestCase):
 
         with self.app.app_context():
             db.create_all()
-    
+
     def test_user_registration_should_return_201(self):
         res = self.client().post('/v1/users/',
             data=json.dumps(self.user),
@@ -64,7 +64,7 @@ class UserTests(unittest.TestCase):
                 'v1/users/login',
                 data=json.dumps({'name': 'test', 'email': 'test@gmail.com', 'password': 'test'}),
                 content_type='application/json')
-            self.assertIn(b'token', res.data)
+            self.assertIn('token', res.json)
     
     def test_login_should_return_404_with_bad_credentials(self):
         with self.client().post('v1/users/',
@@ -75,6 +75,20 @@ class UserTests(unittest.TestCase):
                 data=json.dumps({'name': 'test', 'email': 'test@gmail.com', 'password': 'tester12'}),
                 content_type='application/json')
             self.assertIn(b'invalid credentials', res.data)
+    
+    def test_get_me_should_return_200(self):
+        with self.client().post('v1/users/', data=json.dumps(self.user), content_type='application/json'):
+            login_res = self.client().post('v1/users/login', data=json.dumps(self.user), content_type='application/json')
+            token = login_res.json['token']
+            res = self.client().get('v1/users/me', headers={'api-token': token}, content_type='application/json')
+            self.assertEqual('tester', res.json.get('name'))
+    
+    def test_get_me_should_return_400_no_token(self):
+        res = self.client().get('v1/users/me')
+        self.assertEqual('Authentication token not provided', res.json['error'])
+    
+    def test_edit_me_should_return_new_user_fields(self):
+        pass
 
     def tearDown(self):
         with self.app.app_context():
