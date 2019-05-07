@@ -16,11 +16,6 @@ class UserTests(unittest.TestCase):
             'name': 'tester',
             'password': 'test'
         }
-        self.user2 = {
-            'email': 'tester@gmail.com',
-            'name': 'testering',
-            'password': 'test'
-        }
 
         with self.app.app_context():
             db.create_all()
@@ -49,7 +44,7 @@ class UserTests(unittest.TestCase):
         )
         self.assertIn(b'Bad Request', res.data)
         self.assertEqual(res.status_code, 400)
-    
+
     def test_register_should_return_token(self):
         self.assertIn('token', self.reg.json)
     
