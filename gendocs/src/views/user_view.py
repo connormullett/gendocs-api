@@ -104,13 +104,25 @@ def get_user(user_id):
     URL param -> user_id: int
     returns user data associated from that ID
     '''
-    user = UserModel.get_one_user(user_id)
+    user = UserModel.get_user_by_id(user_id)
     if not user:
-        return custom_response({'error': 'user not found'}, 400)
+        return custom_response({'error': 'user not found'}, 404)
 
     ser_user = user_schema.dump(user).data
     return custom_response(ser_user, 200)
 
+
+@user_api.route('/name/<string:name>', methods=['GET'])
+@Auth.auth_required
+def get_user_by_name(name):
+    user = UserModel.get_user_by_name(name)
+
+    if not user:
+        return custom_response({'error': 'user not found'}, 404)
+    
+    ser_user = user_schema.dump(user).data
+    return custom_response(ser_user, 200)
+    
 
 def custom_response(res, status_code):
     '''
