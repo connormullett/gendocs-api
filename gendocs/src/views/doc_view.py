@@ -44,7 +44,6 @@ def delete(doc_id):
 
 
 @doc_api.route('/', methods=['GET'])
-@Auth.auth_required
 def get_all():
     docs = DocModel.get_all_docs()
     data = doc_schema.dump(docs, many=True).data
@@ -52,7 +51,6 @@ def get_all():
 
 
 @doc_api.route('/<int:doc_id>', methods=['GET'])
-@Auth.auth_required
 def get_one(doc_id):
     doc = DocModel.get_doc_by_id(doc_id)
 
@@ -64,8 +62,19 @@ def get_one(doc_id):
     return custom_response(data, 200)
 
 
+@doc_api.route('/name/<string:doc_name>', methods=['GET'])
+def get_one_by_name(doc_name):
+    doc = DocModel.get_doc_by_name(doc_name)
+
+    if not doc:
+        return custom_response({'error': 'doc not found'}, 404)
+
+    data = doc_schema.dump(doc).data
+
+    return custom_response(data, 200)
+
+
 @doc_api.route('/<string:doc_type>', methods=['GET'])
-@Auth.auth_required
 def get_docs_by_type(doc_type):
     docs = DocModel.get_docs_by_type(doc_type)
 

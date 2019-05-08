@@ -65,6 +65,10 @@ class DocModel(db.Model):
     @staticmethod
     def get_doc_by_id(id):
         return DocModel.query.get(id)
+    
+    @staticmethod
+    def get_doc_by_name(name):
+        return DocModel.query.get(name)
 
     @staticmethod
     def get_docs_by_type(doc_type):
