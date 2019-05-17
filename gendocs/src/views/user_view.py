@@ -108,6 +108,7 @@ def get_user(user_id):
     if not user:
         return custom_response({'error': 'user not found'}, 404)
 
+    # TODO: should not return users email and password hash use UserGetDto
     ser_user = user_schema.dump(user).data
     return custom_response(ser_user, 200)
 
