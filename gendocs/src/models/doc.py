@@ -22,7 +22,7 @@ class DocModel(db.Model):
     __tablename__ = 'docs'
 
     id = db.Column(db.Integer, primary_key=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    owner_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(128), nullable=False)
     doc_type = db.Column(db.Enum(DocType), nullable=False)
     language = db.Column(db.Text, nullable=False)
@@ -81,7 +81,7 @@ class DocModel(db.Model):
 
 class DocSchema(Schema):
     id = fields.Int(dump_only=True)
-    owner_id = fields.Int(required=True)
+    owner_id = fields.Str(required=True)
     doc_type = EnumField(DocType)
     language = fields.Str(required=True)
     title = fields.Str(required=True)

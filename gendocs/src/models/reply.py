@@ -9,7 +9,7 @@ class ReplyModel(db.Model):
     __tablename__ = 'replies'
 
     id = db.Column(db.Integer, primary_key=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    owner_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     reply_to = db.Column(db.Integer, db.ForeignKey('comments.id'), nullable=False)
     created_at = db.Column(db.DateTime)
@@ -40,7 +40,7 @@ class ReplyModel(db.Model):
 
 class ReplySchema(Schema):
     id = fields.Int(dump_only=True)
-    owner_id = fields.Int(required=True)
+    owner_id = fields.Str(required=True)
     content = fields.Str(required=True)
     reply_to = fields.Int(required=True)
     created_at = fields.DateTime(dump_only=True)

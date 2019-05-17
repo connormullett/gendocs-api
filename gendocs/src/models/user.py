@@ -1,5 +1,7 @@
 # models/user.py
 
+from uuid import uuid4
+
 from marshmallow import fields, Schema
 from datetime import datetime
 from . import db
@@ -13,7 +15,7 @@ class UserModel(db.Model):
 
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True, default=str(uuid4()))
     name = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=True)
@@ -70,7 +72,7 @@ class UserModel(db.Model):
 
 # models/user.py
 class UserSchema(Schema):
-    id = fields.Int(dump_only=True)
+    id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     email = fields.Email(required=True)
     password = fields.Str(required=True)

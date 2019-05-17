@@ -12,7 +12,7 @@ class CommentModel(db.Model):
     __tablename__ = 'comments'
 
     id = db.Column(db.Integer, primary_key=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    owner_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     doc_id = db.Column(db.Integer, db.ForeignKey('docs.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime)
@@ -55,7 +55,7 @@ class CommentModel(db.Model):
 
 class CommentSchema(Schema):
     id = fields.Int(dump_only=True)
-    owner_id = fields.Int(required=True)
+    owner_id = fields.Str(required=True)
     doc_id = fields.Int(required=True)
     content = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True)
