@@ -27,6 +27,7 @@ class DocModel(db.Model):
     doc_type = db.Column(db.Enum(DocType), nullable=False)
     language = db.Column(db.Text, nullable=False)
     comments = db.relationship('CommentModel', backref='docs', cascade='all, delete')
+    likes = db.Column(db.Integer)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
@@ -89,4 +90,3 @@ class DocSchema(Schema):
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
     comments = fields.Nested(CommentSchema, many=True)
-

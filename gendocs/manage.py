@@ -6,7 +6,7 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
 from src.app import create_app, db
-from src.models import comment, doc, user, reply
+from src.models import comment, doc, user, reply, like
 
 
 env_name = os.environ['FLASK_ENV']
