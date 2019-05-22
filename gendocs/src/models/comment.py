@@ -4,7 +4,7 @@ from . import db
 from datetime import datetime
 from marshmallow import fields, Schema
 
-# from .reply import ReplyModel
+from .reply import ReplySchema
 
 
 class CommentModel(db.Model):
@@ -17,6 +17,7 @@ class CommentModel(db.Model):
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
+    replies = db.relationship('ReplyModel', backref='comments', cascade='all, delete-orphan', lazy=True)
 
     def __init__(self, data):
         self.id = data.get('id')
@@ -60,4 +61,4 @@ class CommentSchema(Schema):
     content = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
-
+    replies = fields.Nested(ReplySchema, many=True)

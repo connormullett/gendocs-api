@@ -18,7 +18,7 @@ def create_doc():
     data, error = doc_schema.load(req_data)
 
     if error:
-        return custom_response(error, 404)
+        return custom_response(error, 400)
 
     doc = DocModel(data)
     doc.save()
@@ -36,11 +36,11 @@ def delete(doc_id):
         return custom_response({'error': 'doc not found'}, 404)
 
     data = doc_schema.dump(doc).data
-    if data.get('owner_id') != g.user.get('id'):
-        return custom_response({'error': 'permission denied'}, 400)
+    # if data.get('owner_id') != g.user.get('id'):
+    #     return custom_response({'error': 'permission denied'}, 400)
 
     doc.delete()
-    return custom_response({'message': 'delete'}, 204)
+    return custom_response({'message': 'deleted'}, 204)
 
 
 @doc_api.route('/', methods=['GET'])
@@ -93,8 +93,8 @@ def update(doc_id):
 
     data = doc_schema.dump(doc).data
 
-    if data.get('owner_id') != g.user.get('id'):
-        return custom_response({'error': 'permission denied'}, 400)
+    # if data.get('owner_id') != g.user.get('id'):
+    #     return custom_response({'error': 'permission denied'}, 400)
 
     data, error = doc_schema.load(req_data, partial=True)
 

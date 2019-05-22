@@ -9,6 +9,7 @@ from .models import db, bcrypt
 from .views.user_view import user_api
 from .views.doc_view import doc_api
 from .views.comment_view import comment_api
+from .views.reply_view import reply_api
 
 
 def create_app(env_name):
@@ -23,6 +24,7 @@ def create_app(env_name):
     app.register_blueprint(user_api, url_prefix='/v1/users')
     app.register_blueprint(doc_api, url_prefix='/v1/docs')
     app.register_blueprint(comment_api, url_prefix='/v1/comments')
+    app.register_blueprint(reply_api, url_prefix='/v1/replies')
 
     bcrypt.init_app(app)
     db.init_app(app)

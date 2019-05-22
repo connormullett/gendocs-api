@@ -36,6 +36,18 @@ class ReplyModel(db.Model):
             setattr(self, key, item)
         self.modified_at = datetime.utcnow()
         db.session.commit()
+    
+    @staticmethod
+    def get_reply_by_id(reply_id):
+        return ReplyModel.query.filter_by(id=reply_id).first()
+
+    @staticmethod
+    def get_replies_by_user(user_id):
+        return ReplyModel.query.filter_by(owner_id=user_id)
+
+    @staticmethod
+    def get_replies_by_comment_id(comment_id):
+        return ReplyModel.query.filter_by(reply_to=comment_id)
 
 
 class ReplySchema(Schema):
@@ -45,4 +57,3 @@ class ReplySchema(Schema):
     reply_to = fields.Int(required=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
-

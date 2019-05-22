@@ -80,4 +80,3 @@ class UserSchema(Schema):
     modified_at = fields.DateTime(dump_only=True)
     docs = fields.Nested(DocSchema, many=True)
     comments = fields.Nested(CommentSchema, many=True)
-
