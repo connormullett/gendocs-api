@@ -97,7 +97,7 @@ def me():
     return custom_response(ser_user, 200)
 
 
-@user_api.route('/<int:user_id>', methods=['GET'])
+@user_api.route('/by_id/<string:user_id>', methods=['GET'])
 @Auth.auth_required
 def get_user(user_id):
     '''
@@ -108,12 +108,11 @@ def get_user(user_id):
     if not user:
         return custom_response({'error': 'user not found'}, 404)
 
-    # TODO: should not return users email and password hash use UserGetDto
     ser_user = user_schema.dump(user).data
     return custom_response(ser_user, 200)
 
 
-@user_api.route('/name/<string:name>', methods=['GET'])
+@user_api.route('/by_name/<string:name>', methods=['GET'])
 @Auth.auth_required
 def get_user_by_name(name):
     user = UserModel.get_user_by_name(name)
@@ -122,6 +121,8 @@ def get_user_by_name(name):
         return custom_response({'error': 'user not found'}, 404)
     
     ser_user = user_schema.dump(user).data
+    ser_user.pop('email')
+    ser_user.pop('password')
     return custom_response(ser_user, 200)
     
 
