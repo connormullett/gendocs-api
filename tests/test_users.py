@@ -83,19 +83,19 @@ class UserTests(unittest.TestCase):
     
     def test_delete_me_no_users_in_db(self):
         del_res = self.client().delete('v1/users/me', headers={'api-token': self.token}, content_type='application/json')
-        res = self.client().get(f'v1/users/name/{self.user["name"]}', headers={'api-token': self.token}, content_type='application/json')
+        res = self.client().get(f'v1/users/by_name/{self.user["name"]}', headers={'api-token': self.token}, content_type='application/json')
         self.assertEqual(res.status_code, 400)  # api-token no longer valid as user was deleted
     
     def test_get_user_by_id(self):
         with self.app.app_context():
             user_id = self.client().get('v1/users/me', headers={'api-token': self.token}, content_type='application/json').json['id']
-            res = self.client().get(f'v1/users/{user_id}', headers={'api-token': self.token}, content_type='application/json')
+            res = self.client().get(f'v1/users/by_id/{user_id}', headers={'api-token': self.token}, content_type='application/json')
             self.assertEqual(res.status_code, 200)
         
     def test_get_user_by_name(self):
         with self.app.app_context():
                     name = self.client().get('v1/users/me', headers={'api-token': self.token}, content_type='application/json').json['name']
-                    res = self.client().get(f'v1/users/name/{name}', headers={'api-token': self.token}, content_type='application/json')
+                    res = self.client().get(f'v1/users/by_name/{name}', headers={'api-token': self.token}, content_type='application/json')
                     self.assertEqual(res.status_code, 200)
 
     def tearDown(self):
