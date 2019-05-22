@@ -3,6 +3,8 @@ import unittest
 import os
 import json
 from gendocs.src.app import create_app, db
+from flask import Response
+from gendocs.src.views.user_view import custom_response
 
 
 class UserTests(unittest.TestCase):
@@ -94,9 +96,13 @@ class UserTests(unittest.TestCase):
         
     def test_get_user_by_name(self):
         with self.app.app_context():
-                    name = self.client().get('v1/users/me', headers={'api-token': self.token}, content_type='application/json').json['name']
-                    res = self.client().get(f'v1/users/by_name/{name}', headers={'api-token': self.token}, content_type='application/json')
-                    self.assertEqual(res.status_code, 200)
+            name = self.client().get('v1/users/me', headers={'api-token': self.token}, content_type='application/json').json['name']
+            res = self.client().get(f'v1/users/by_name/{name}', headers={'api-token': self.token}, content_type='application/json')
+            self.assertEqual(res.status_code, 200)
+    
+    def test_custom_response_should_return_custom_response(self):
+        self.c_res = custom_response({'status': 'this should work'}, 200)
+        self.assertIsInstance(self.c_res, Response)
 
     def tearDown(self):
         with self.app.app_context():
