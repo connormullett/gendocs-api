@@ -8,6 +8,7 @@ from marshmallow import fields, Schema
 from marshmallow_enum import EnumField
 
 from .comment import CommentModel, CommentSchema
+from .like import LikeModel, LikeSchema
 
 
 class DocType(enum.Enum):
