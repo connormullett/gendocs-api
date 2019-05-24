@@ -4,7 +4,7 @@ import os
 import json
 from gendocs.src.app import create_app, db
 from flask import Response
-from gendocs.src.views.user_view import custom_response
+from gendocs.src.views.user_view import custom_response, _check_password
 
 
 class UserTests(unittest.TestCase):
@@ -47,6 +47,32 @@ class UserTests(unittest.TestCase):
         )
         self.assertIn(b'Bad Request', res.data)
         self.assertEqual(res.status_code, 400)
+    
+    def test_register_password_mismatch_should_return_400(self):
+        user = self.user
+        user['confirm_password'] = 'test12'
+        res = self.client().post(
+            'v1/users/',
+            data=user,
+            content_type='application/json'
+        )
+        self.assertEqual(res.status_code, 400)
+
+    def test_register_bad_password_should_return_400(self):
+        '''
+        a bad password does not have one of the following:
+        symbol, uppercase/lowercase char, numeral
+        '''
+        user = self.user
+        user['password'] = user['confirm_password'] = 'test'
+
+        res = self.client().post(
+            'v1/users/',
+            data=user,
+            content_type='application/json'
+        )
+        self.assertEqual(res.status_code, 400)
+
 
     def test_register_should_return_token(self):
         self.assertIn('token', self.reg.json)
@@ -104,6 +130,14 @@ class UserTests(unittest.TestCase):
     def test_custom_response_should_return_custom_response(self):
         self.c_res = custom_response({'status': 'this should work'}, 200)
         self.assertIsInstance(self.c_res, Response)
+    
+    def test_check_password_should_return_true_for_good_password(self):
+        password = self.user['password']
+        self.assertTrue(_check_password(password))
+
+    def test_check_password_should_return_false_for_bad_password(self):
+        password = 'test'
+        self.assertFalse(_check_password(password))
 
     def tearDown(self):
         with self.app.app_context():
