@@ -1,5 +1,7 @@
 # user_view.py
 
+import re
+
 from flask import request, json, Response, Blueprint, g
 from ..models.user import UserModel, UserSchema
 from ..shared.authentication import Auth
@@ -22,12 +24,21 @@ def register():
     if error:
         return custom_response(error, 400)
 
-    user_in_db = UserModel.get_user_by_email(data.get('email'))
-    if user_in_db:
+    if UserModel.get_user_by_email(data.get('email')):
         message = {'error': 'user already exists'}
         return custom_response(message, 400)
+    
+    # TODO: check if flask covers port sanitizing
+
+    if not _check_password(data.get('password')):
+        message = {'error': 'bad or weak password'}
+        return custom_response(message, 400)
+    
+    if not req_data.get('confirm_password') or (req_data.get('password') != req_data.get('confirm_password')):
+        return custom_response({'error': 'passwords do not match'}, 400)
 
     user = UserModel(data)
+
     user.save()
 
     ser_data = user_schema.dump(user).data
@@ -124,7 +135,16 @@ def get_user_by_name(name):
     ser_user.pop('email')
     ser_user.pop('password')
     return custom_response(ser_user, 200)
-    
+
+
+def _check_password(password):
+    pat = re.compile('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$')
+    mat = re.search(pat, password)
+
+    if mat:
+        return True
+    return False
+
 
 def custom_response(res, status_code):
     '''
