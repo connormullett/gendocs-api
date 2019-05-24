@@ -16,7 +16,8 @@ class UserTests(unittest.TestCase):
         self.user = {
             'email': 'test@gmail.com',
             'name': 'tester',
-            'password': 'test'
+            'password': 'Test1!',
+            'confirm_password': 'Test1!'
         }
 
         with self.app.app_context():
@@ -60,7 +61,7 @@ class UserTests(unittest.TestCase):
     def test_login_should_return_404_with_bad_credentials(self):
         res = self.client().post(
             'v1/users/login',
-            data=json.dumps({'name': 'test', 'email': 'test@gmail.com', 'password': 'tester12'}),
+            data=json.dumps({'name': 'test', 'email': 'test@gmail.com', 'password': 'Tester12'}),
             content_type='application/json')
         self.assertIn(b'invalid credentials', res.data)
     
